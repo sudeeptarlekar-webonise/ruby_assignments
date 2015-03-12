@@ -44,11 +44,11 @@ choice = gets.chomp.to_i
 userOps = nil
 case choice
 	when 1
-		userOps = Array.new()
+		userOps = Array.new
 	when 2
-		userOps = Hash.new()
+		userOps = Hash.new
 	when 3
-		userOps = String.new()
+		userOps = String.new
 	else "Enter correct choice"
 end
 
