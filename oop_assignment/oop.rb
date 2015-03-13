@@ -21,8 +21,16 @@ module Shop
 	end
 
 	def remove(id)
-		file_array = getInventoryFileArray
-		temp_file = Tempfile.new("extract")
+		open("inventory.csv","r") do |mainFile|
+			open("tempInventory.csv","a+") do |tempFile|
+				mainFile.each_line do |line|
+					unless line.start_with? id.to_s
+						tempFile.puts(line)
+					end
+				end
+			end
+		end
+		FileUtils.mv "tempInventory.csv" , "inventory.csv"
 	end
 
 	def edit(id,name,price,company,stock)
@@ -37,6 +45,7 @@ module Shop
 				end
 			end
 		end
+		FileUtils.mv "tempInventory.csv" , "inventory.csv"
 	end
 
 	def getInventory
@@ -86,12 +95,30 @@ class Customer
 	def buy(id)
 		inventory_file = getInventoryFileArray
 		orders_file = getOrders
+		removeFlag = nil
+		product = nil
 		for row in inventory_file
 			if product = /^#{id};.*/.match(row)
-				puts (product.to_s).split(";").last.to_i - 1 
-				orders_file.puts product.to_s
+				break
 			end
 		end
+
+		if 0 == (product.to_s).split(";").last.to_i - 1
+			removeFlag = true
+		else
+			removeFlag = false
+		end
+		orders_file.puts product.to_s
+
+		product = (product.to_s).split(";")
+
+		
+		if removeFlag
+			remove(id)
+		else
+			edit(id,product[1],product[2],product[3],product[4].to_i-1)
+		end
+		
 	end
 end
 
