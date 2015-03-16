@@ -54,4 +54,3 @@ end
 puts "Enter path for ruby file"
 filePath = gets.chomp
 RubyParser.new.getVariableCount(filePath)
-
