@@ -38,7 +38,7 @@ class RubyParser
 			end
 			puts "#{line} #{token}"
 		end
-		puts varHash
+		#puts varHash
 	end
 	
 	def matchData?(array, line)
@@ -53,4 +53,9 @@ end
 
 puts "Enter path for ruby file"
 filePath = gets.chomp
-RubyParser.new.getVariableCount(filePath)
+hash = RubyParser.new.getVariableCount(filePath)
+puts "Global variables : #{(hash["Global"]).size}"
+puts "Class variables : #{(hash["Class"]).size}"
+puts "Instance variables : #{(hash["Instance"]).size}"
+puts "Local variables : #{(hash["Local"]).size}"
+
